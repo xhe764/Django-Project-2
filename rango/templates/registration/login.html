@@ -1,0 +1,16 @@
+{% extends "rango/base.html" %}
+{% block body_block %}
+<link href="http://v4-alpha.getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
+<div class="jumbtron">
+  <h1 class="display-3">Login</h1>
+  <form class="form-signin" method="post" action=".">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Sign in</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+  <p>
+    Not a member?
+    <a href="{% url 'registration_register' %}">Register</a>
+  </p>
+{% endblock %}

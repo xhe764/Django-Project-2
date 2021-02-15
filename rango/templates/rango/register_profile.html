@@ -1,0 +1,19 @@
+{% extends 'rango/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title_block %}
+  Create User Profile
+{% endblock %}
+
+{% block body_block %}
+{% if user.is_authenticated %}
+  <form role="form" id="userprofile" method="post"  enctype="multipart/form-data" action="{% url 'register_profile' %}">
+    <h4 class="form-signin-heading">Please fill the foloowing fields</h4>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button type="submit" class="btn btn-primary" name="submit">Register your profile</button>
+{% else %}
+    <h4>You have not logged in yet. Please do so first</h4>
+{% endif %}
+{% endblock %}
