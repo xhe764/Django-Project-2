@@ -9,7 +9,7 @@
 {% block body_block %}
 {% if user.is_authenticated %}
   <form role="form" id="userprofile" method="post"  enctype="multipart/form-data" action="{% url 'register_profile' %}">
-    <h4 class="form-signin-heading">Please fill the foloowing fields</h4>
+    <h4 class="form-signin-heading">Please fill the following fields</h4>
     {% csrf_token %}
     {% bootstrap_form form %}
     <button type="submit" class="btn btn-primary" name="submit">Register your profile</button>

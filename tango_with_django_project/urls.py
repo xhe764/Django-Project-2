@@ -24,12 +24,12 @@ from registration.backends.simple.views import RegistrationView
 #if successful at logging
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
-        return url('rango/register_profile')
+        return '/rango/register_profile'
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('rango/', include('rango.urls')),
     path('admin/', admin.site.urls),
-    path('accounts/register', MyRegistrationView.as_view(), name='registration_register'),
+    path('accounts/register/', MyRegistrationView.as_view(), name='my_registration_register'),
     path('accounts/', include('registration.backends.simple.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

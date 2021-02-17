@@ -139,6 +139,8 @@ REGISTRATION_OPEN = True
 ACCOUNT_ACTIVATION_DAYS = 7
 # If True, the user will be automatically logged in.
 REGISTRATION_AUTO_LOGIN = False
+#SIMPLE_BACKEND_REDIRECT_URL = "/rango/register_profile"
+
 # The page you want users to arrive at after they successfully log in
 LOGIN_REDIRECT_URL = '/rango/'
 # The page users are directed to if they are not logged in,
