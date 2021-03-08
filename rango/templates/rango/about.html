@@ -10,4 +10,20 @@
   <p><strong>You have visited this site {{ visits }} times</strong></p>
   <img src='{% static static_img %}' alt='Picture of rango' />
   <!--img src="{{ MEDIA_URL }}cat.jpg" width=200 -->
+
+  <div class="pt-3">
+    <button class="btn btn-primary"
+  onClick="alert('You clicked the button using JavaScript.');">
+      Click Me - I run JavaScript
+    </button>
+
+    <button class="btn btn-primary" id="about-btn">
+        Click Me - I'm JavaScript on Speed</button>
+    <div class="ouch pt-3">
+      <p>This is a example</p>
+      <p>This is Jquery example</p>
+    </div>
+    <div id="msg">Hello - I'm here for a JQuery Example too</div>
+
+    </div>
 {% endblock%}

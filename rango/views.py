@@ -99,8 +99,6 @@ def show_category(request, category_name_slug):
             context_dict['query'] = query
             context_dict['result_list'] = result_list
 
-
-
     return render(request, 'rango/category.html', context_dict)
 
 @login_required
@@ -146,12 +144,151 @@ def add_page(request, category_name_slug):
                 page.category = category
                 page.views = 0
                 page.save()
-                return show_category(request, category_name_slug)
-            else:
-                print(form.errors)
+            return redirect('show_category', category_name_slug)
+        else:
+            print(form.errors)
 
     context_dict = {'form':form, 'category':category}
     return render(request, 'rango/add_page.html', context_dict)
+
+@login_required
+def restricted(request):
+    return render(request, 'rango/restricted.html', {})
+"""
+@login_required
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+    # Take the user back to the homepage.
+    return HttpResponseRedirect(reverse('index'))
+"""
+"""
+def search(request):
+    result_list = []
+
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+
+    return render(request, 'rango/search.html', {'result_list':result_list, "query":query})
+"""
+def track_url(request):
+    page_id = None
+    if request.method == 'GET':
+        if 'page_id' in request.GET:
+            page_id = request.GET['page_id']
+            page = Page.objects.get(pk=page_id)
+            page.views += 1
+            page.save()
+            return redirect(page.url)
+        else:
+            return redirect(reverse('index'))
+
+@login_required
+def register_profile(request):
+    form = UserProfileForm()
+
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+
+            return redirect('index')
+        else:
+            print(form.errors)
+
+    return render(request, 'rango/register_profile.html', {'form':form})
+
+@login_required
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return redirect('index')
+
+    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    form = UserProfileForm(
+    {'website': userprofile.website, 'picture': userprofile.picture})
+
+    if user.username == request.user.username:
+        if request.method == 'POST':
+            form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+
+            if form.is_valid():
+                form.save(commit=True)
+                return redirect('profile', username)
+            else:
+                print(form.errors)
+
+    return render(request, 'rango/profile.html',
+    {'userprofile': userprofile, 'selecteduser': user, 'form': form})
+
+@login_required
+def list_profiles(request):
+    userprofile_list = UserProfile.objects.all()
+
+    return render(request, 'rango/list_profiles.html', {'userprofile_list': userprofile_list})
+
+@login_required
+def like_category(request):
+    cat_id = None
+    if request.method == 'GET':
+        cat_id = request.GET['category_id']
+    likes = 0
+    if cat_id:
+        cat = Category.objects.get(id=int(cat_id))
+        if cat:
+            if cat.liked_by.filter(username=request.user.username):
+                return HttpResponse("You have already liked this category")
+            else:
+                cat.liked_by.add(request.user)
+                likes = cat.likes + 1
+                cat.likes = likes
+                cat.save()
+                return HttpResponse(likes)
+
+@login_required
+def add_page_button(request):
+    #form = PageForm()
+    if request.method == 'POST':
+        cat_name = request.POST.get('cat_name', None)
+        cat_slug = request.POST.get('page_cat', None)
+        title=request.POST.get('page_title', None)
+        url = request.POST.get('page_url', None)
+        c = Category.objects.get_or_create(name=cat_name)[0]
+        p = Page.objects.get_or_create(category=c, title=title)[0]
+        p.url = url
+        p.views = 0
+        p.save()
+        return redirect('show_category', cat_slug)
+    else:
+        return HttpResponse("request.post not working")
+
+def get_category_list(max_results=0, starts_with=""):
+    cat_list = []
+    if starts_with:
+        cat_list = Category.objects.filter(name__istartswith=starts_with)
+
+    if max_results > 0:
+        if len(cat_list) > max_results:
+            cat_list = cat_list[:max_results]
+    return cat_list
+
+def suggest_category(request):
+    cat_list = []
+    starts_with = ""
+    if request.method == "GET":
+        starts_with = request.GET["suggestion"]
+
+    cat_list = get_category_list(8, starts_with)
+
+    return render(request, "rango/cats.html", {"cats": cat_list})
+
+
+
 """
 def register(request):
     # A boolean value for telling the template
@@ -256,53 +393,3 @@ def user_login(request):
         # blank dictionary object...
         return render(request, 'rango/login.html', {})
 """
-@login_required
-def restricted(request):
-    return render(request, 'rango/restricted.html', {})
-"""
-@login_required
-def user_logout(request):
-    # Since we know the user is logged in, we can now just log them out.
-    logout(request)
-    # Take the user back to the homepage.
-    return HttpResponseRedirect(reverse('index'))
-"""
-"""
-def search(request):
-    result_list = []
-
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-            result_list = run_query(query)
-
-    return render(request, 'rango/search.html', {'result_list':result_list, "query":query})
-"""
-def track_url(request):
-    page_id = None
-    if request.method == 'GET':
-        if 'page_id' in request.GET:
-            page_id = request.GET['page_id']
-            page = Page.objects.get(pk=page_id)
-            page.views += 1
-            page.save()
-            return redirect(page.url)
-        else:
-            return redirect(reverse('index'))
-
-@login_required
-def register_profile(request):
-    form = UserProfileForm()
-
-    if request.method == "POST":
-        form = UserProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            user_profile = form.save(commit=False)
-            user_profile.user = request.user
-            user_profile.save()
-
-            return redirect('index')
-        else:
-            print(form.errors)
-
-    return render(request, 'rango/register_profile.html', {'form':form})

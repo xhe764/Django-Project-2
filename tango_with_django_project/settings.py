@@ -32,9 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #'django.contrib.sites',
-    'rango',
     'django.contrib.sites',
+    'rango',
     'registration',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -146,3 +145,4 @@ LOGIN_REDIRECT_URL = '/rango/'
 # The page users are directed to if they are not logged in,
 # and are trying to access pages requiring authentication
 LOGIN_URL = '/accounts/login/'
+SITE_ID = 1

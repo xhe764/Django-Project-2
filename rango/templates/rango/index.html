@@ -7,12 +7,13 @@
 
 {% block body_block %}
 <div>
-  <h3>Rango says...</h3>
+  <h3>Rango says...
   {% if user.is_authenticated %}
     howdy {{ user.username }}!
   {% else %}
     hey there partner!
   {% endif %}
+  </h3>
 </div>
 
 <div class='row'>
@@ -49,5 +50,5 @@
     </p>
   </div>
 </div>
-<img src="{% static "images/rango.jpg" %}" alt="Picture of Rango" />
+<img src="{% static 'images/rango.jpg' %}" alt="Picture of Rango" />
 {% endblock %}
