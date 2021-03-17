@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomSearchEngine id="b026cb20027162015" creator="003036201498377192488" keywords="sequencing genomics proteomics bioinformatics 'artificial intelligence' 'machine learning' genetics" language="en" encoding="UTF-8" enable_promotions="true" cx_id="b026cb20027162015" last_update_time_millis="1615412901173" autocompletions="true">
+  <Title>entire web search</Title>
+  <Context>
+    <Facet>
+      <FacetItem>
+        <Label name="data_analysis" mode="BOOST">
+          <Rewrite/>
+          <entities>
+            <entity mid="/m/07zy4y"/>
+          </entities>
+        </Label>
+        <Title>data analysis</Title>
+      </FacetItem>
+      <FacetItem>
+        <Label name="bioinformatics" mode="BOOST">
+          <Rewrite/>
+          <entities>
+            <entity mid="/m/01540"/>
+            <entity mid="/m/04sh3"/>
+            <entity mid="/m/0bscct"/>
+          </entities>
+        </Label>
+        <Title>bioinformatics</Title>
+      </FacetItem>
+    </Facet>
+    <BackgroundLabels>
+      <Label name="_include_" mode="BOOST"/>
+      <Label name="_exclude_" mode="ELIMINATE"/>
+    </BackgroundLabels>
+  </Context>
+  <LookAndFeel code="4" element_layout="3" theme="7" url_length="breadcrumbs" enable_cse_thumbnail="true" promotion_url_length="full" font="2">
+    <Logo/>
+    <Colors/>
+    <Promotions/>
+    <SearchControls/>
+    <Results/>
+    <Widget query_parameter_name="rango-query"/>
+  </LookAndFeel>
+  <ImageSearchSettings layout="2"/>
+  <sort_by_keys label="Relevance" key=""/>
+  <sort_by_keys label="Date" key="date"/>
+  <cse_advance_settings>
+    <web_search_options enable_history="false"/>
+    <search_options query_additon=""/>
+  </cse_advance_settings>
+  <entities>
+    <entity mid="/m/01540"/>
+    <entity mid="/m/04sh3"/>
+    <entity mid="/m/0mkz"/>
+    <entity mid="/m/0bscct"/>
+    <entity mid="/m/07zy4y"/>
+  </entities>
+</CustomSearchEngine>

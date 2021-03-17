@@ -40,9 +40,11 @@
       <div>
         <script async src="https://cse.google.com/cse.js?cx=b026cb20027162015"></script>
         <div class="gcse-searchbox"></div>
-        <div class="gcse-searchresults"></div>
+        <div class="gcse-searchresults" data-defaultToImageSearch="true"></div>
         <script>
-          myWebResultsRenderedCallback = function(name, q, promos, results) {
+          yWebResultsRenderedCallback = function(name, q, promos, results) {
+            document.getElementById("master-1").style.display="none";
+            document.getElementsByClassName("gs-snippet")[0].style.color = 'red';
             for (const div of promos.concat(results)) {
               const innerDiv = document.createElement('div');
               innerDiv.appendChild(document.createTextNode('Add: '));
@@ -56,7 +58,7 @@
           window.__gcse || (window.__gcse = {});
           window.__gcse.searchCallbacks = {
             web: {
-              rendered: 'myWebResultsRenderedCallback',
+              rendered: 'yWebResultsRenderedCallback',
             },
           };
         </script>
