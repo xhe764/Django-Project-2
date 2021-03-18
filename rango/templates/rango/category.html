@@ -42,23 +42,36 @@
         <div class="gcse-searchbox"></div>
         <div class="gcse-searchresults" data-defaultToImageSearch="true"></div>
         <script>
-          yWebResultsRenderedCallback = function(name, q, promos, results) {
-            document.getElementById("master-1").style.display="none";
-            document.getElementsByClassName("gs-snippet")[0].style.color = 'red';
+          myWebResultsRenderedCallback = function(name, q, promos, results) {
+            var adblock = document.getElementById("master-1");
+            adblock.style.display="none";
+          //  let btn = document.createElement("BUTTON");
+          //  btn.innerHTML = "Add to Rango";
+          //  adblock.insertAdjacentElement('afterend', btn);
+
             for (const div of promos.concat(results)) {
               const innerDiv = document.createElement('div');
-              innerDiv.appendChild(document.createTextNode('Add: '));
-              const checkBox = document.createElement('input');
-              checkBox.type = 'checkbox';
-              checkBox.name = 'save';
-              innerDiv.appendChild(checkBox);
-              div.insertAdjacentElement('afterbegin', innerDiv);
+          //    innerDiv.appendChild(document.createTextNode('Add: '));
+              const a = div.querySelector('a.gs-title');
+              //const btnDiv = document.createElement('span');
+              const btn = document.createElement('BUTTON');
+              btn.type = 'button';
+              btn.class = "rango-add btn btn-info";
+              btn.setAttribute("data-title", a.innerText);
+              btn.setAttribute("data-url", a.href);
+              btn.name = 'save';
+              btn.innerHTML = "Add to Rango";
+              btn.style.position = "relative";
+              btn.style.left = "20px";
+              //btnDiv.appendChild(btn);
+              a.appendChild(btn);
+              div.insertAdjacentElement('afterend', innerDiv);
             }
           };
           window.__gcse || (window.__gcse = {});
           window.__gcse.searchCallbacks = {
             web: {
-              rendered: 'yWebResultsRenderedCallback',
+              rendered: 'myWebResultsRenderedCallback',
             },
           };
         </script>
