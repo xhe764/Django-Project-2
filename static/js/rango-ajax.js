@@ -12,55 +12,30 @@ function getCookie(name) {
         }
     }
     return cookieValue;
-}
+};
 const csrftoken = getCookie('csrftoken');
 
 
 $(document).ready(function() {
 		// JQuery code to be added in here.
-		$('#likes').click(function(){
-		var catid;
-		catid = $(this).attr("data-catid");
 
-    $.get('/rango/like/', {category_id: catid}, function(data){
-      likes=Number(data)
-      if(!isNaN(likes)){
-        $('#like_count').html(data);
-        $('#likes').hide();
-      }else{
-        $('#likes').hide();
-        $('#liked').css("display", "block");
-        $('#liked').html(data);
-      }
-    });
-	 });
+   $('#likes').click(function(){
+     alert("Likes button clicked");
+     var catid;
+     catid = $(this).attr("data-catid");
 
-   $('button.addpage').click(function(){
-
-     var page_url, page_title, page_cat, cat_name;
-     page_url = $(this).attr("data-url");
-     page_title = $(this).attr("data-title");
-     page_cat = $(this).attr("data-cat");
-     cat_name = $(this).attr("cat-name");
-    // data = ;
-     $.ajax({
-         url: '/rango/add_page_button/', //The "/" at the end is necessary
-         beforeSend: function (xhr) {
-        xhr.setRequestHeader('X-CSRFToken', csrftoken);
-        },
-         data: {
-           page_url: page_url,
-           page_title: page_title,
-           page_cat: page_cat,
-           cat_name: cat_name
-         },
-         datatype: 'json',
-         type: 'POST',
-         error: function(res){
-           alert("Error: " + res.status)
-         }
-       });
-   })
+     $.get('/rango/like/', {category_id: catid}, function(data){
+       likes=Number(data)
+       if(!isNaN(likes)){
+         $('#like_count').html(data);
+         $('#likes').hide();
+       }else{
+         $('#likes').hide();
+         $('#liked').css("display", "block");
+         $('#liked').html(data);
+       };
+     });
+   });
 
    $("#suggestion").keyup(function(){
      var query;
@@ -69,7 +44,7 @@ $(document).ready(function() {
      $.get("/rango/suggest/", {suggestion: query}, function(data){
        $("#cats").html(data);
      })
-   })
+   });
 
 
 })

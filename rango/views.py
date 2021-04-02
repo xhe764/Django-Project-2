@@ -259,8 +259,8 @@ def add_page_button(request):
         title=request.POST.get('page_title', None)
         url = request.POST.get('page_url', None)
         c = Category.objects.get_or_create(name=cat_name)[0]
-        p = Page.objects.get_or_create(category=c, title=title)[0]
-        p.url = url
+        p = Page.objects.get_or_create(category=c, title=title, url=url)[0]
+        # p.url = url
         p.views = 0
         p.save()
         return redirect('show_category', cat_slug)

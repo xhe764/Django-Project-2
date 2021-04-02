@@ -21,7 +21,7 @@
     </div>
 
     {% if pages %}
-      <ul>
+      <ul id="pages">
       {% for page in pages %}
         <li><a href="{% url 'goto' %}?page_id={{page.id}}">{{ page.title }}</a>
           {% if page.views > 1 %}
@@ -36,15 +36,49 @@
       <strong>No pages currently in category.</strong>
     {% endif %}
     <a href="{% url 'add_page' category.slug %}">Add a Page</a>
+    <hr>
     {% if user.is_authenticated %}
       <div>
-        <script async src="https://cse.google.com/cse.js?cx=b026cb20027162015"></script>
-        <div class="gcse-searchbox"></div>
+        <div id="test" class="gcse-searchbox"></div>
+        <script>
+          const myInitCallback = function() {
+            if (document.readyState == 'complete') {
+              // Document is ready when Search Element is initialized.
+              // Render an element with both search box and search results in div with id 'test'.
+              google.search.cse.element.render(
+                  {
+                    div: "test",
+                    tag: 'search'
+                   });
+               document.getElementById('gsc-i-id1').value="{{category.name}}";
+
+            } else {
+              // Document is not ready yet, when Search Element is initialized.
+              google.setOnLoadCallback(function() {
+                 // Render an element with both search box and search results in div with id 'test'.
+                  google.search.cse.element.render(
+                      {
+                        div: "test",
+                        tag: 'search'
+                      });
+              document.getElementById('gsc-i-id1').value="{{category.name}}";
+              
+              }, true);
+            }
+          };
+
+          // Insert it before the Search Element code snippet so the global properties like parsetags and callback
+          // are available when cse.js runs.
+          window.__gcse = {
+            parsetags: 'explicit',
+            initializationCallback: myInitCallback
+          };
+        </script>
         <div class="gcse-searchresults" data-defaultToImageSearch="true"></div>
         <script>
           myWebResultsRenderedCallback = function(name, q, promos, results) {
-            var adblock = document.getElementById("master-1");
-            adblock.style.display="none";
+            //var adblock = document.getElementById("master-1");
+            //adblock.style.display="none";
           //  let btn = document.createElement("BUTTON");
           //  btn.innerHTML = "Add to Rango";
           //  adblock.insertAdjacentElement('afterend', btn);
@@ -56,17 +90,58 @@
               //const btnDiv = document.createElement('span');
               const btn = document.createElement('BUTTON');
               btn.type = 'button';
-              btn.class = "rango-add btn btn-info";
+              btn.className = "rango-add btn btn-success";
               btn.setAttribute("data-title", a.innerText);
               btn.setAttribute("data-url", a.href);
+              btn.setAttribute("data-cat-slug", "{{category.slug}}");
+              btn.setAttribute("data-cat-name", "{{category.name}}");
               btn.name = 'save';
               btn.innerHTML = "Add to Rango";
               btn.style.position = "relative";
               btn.style.left = "20px";
               //btnDiv.appendChild(btn);
-              a.appendChild(btn);
+              a.insertAdjacentElement('afterend', btn);
               div.insertAdjacentElement('afterend', innerDiv);
-            }
+            };
+            $('button.rango-add').click(function(){
+              var page_url, page_title, page_cat, cat_name, me;
+              page_url = $(this).attr("data-url");
+              page_title = $(this).attr("data-title");
+              page_cat = $(this).attr("data-cat-slug");
+              cat_name = $(this).attr("data-cat-name");
+              me = $(this);
+
+              $.ajax({
+                  url: '/rango/add_page_button/',
+                  //The "/" at the end is necessary
+
+                  beforeSend: function (xhr) {
+                 xhr.setRequestHeader('X-CSRFToken', csrftoken)
+                 },
+                  data: {
+                    page_url: page_url,
+                    page_title: page_title,
+                    page_cat: page_cat,
+                    cat_name: cat_name
+                  },
+                  datatype: 'json',
+                  type: 'POST',
+                  success: function(){
+                    me.hide();
+                    let list = document.createElement("LI");
+                    let anchor = document.createElement("A");
+                    anchor.setAttribute("href", page_url);
+                    let title = document.createTextNode(page_title);
+                    anchor.appendChild(title);
+                    list.appendChild(anchor);
+                    document.getElementById("pages").appendChild(list);
+
+                  },
+                  error: function(res){
+                    alert("Error: " + res.status)
+                  }
+                });
+            });
           };
           window.__gcse || (window.__gcse = {});
           window.__gcse.searchCallbacks = {
@@ -75,6 +150,7 @@
             },
           };
         </script>
+
       </div>
     {% endif %}
   {% else %}
