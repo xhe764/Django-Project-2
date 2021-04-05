@@ -62,7 +62,7 @@
                         tag: 'search'
                       });
               document.getElementById('gsc-i-id1').value="{{category.name}}";
-              
+
               }, true);
             }
           };
@@ -74,9 +74,15 @@
             initializationCallback: myInitCallback
           };
         </script>
-        <div class="gcse-searchresults" data-defaultToImageSearch="true"></div>
+        <div class="gcse-searchresults"></div>
         <script>
-          myWebResultsRenderedCallback = function(name, q, promos, results) {
+          const myWebSearchStartingCallback = function(gname, query){
+            return query + " " + "{{category.name}}";
+          };
+          window.myImageSearchStartingCallbackName = myWebSearchStartingCallback;
+
+          //
+          const myWebResultsRenderedCallback = function(name, q, promos, results) {
             //var adblock = document.getElementById("master-1");
             //adblock.style.display="none";
           //  let btn = document.createElement("BUTTON");
@@ -143,11 +149,16 @@
                 });
             });
           };
+
           window.__gcse || (window.__gcse = {});
           window.__gcse.searchCallbacks = {
             web: {
-              rendered: 'myWebResultsRenderedCallback',
+              starting: myWebSearchStartingCallback,
+              rendered: myWebResultsRenderedCallback, 
             },
+            image: {
+              starting: myImageSearchStartingCallbackName,
+            }
           };
         </script>
 
