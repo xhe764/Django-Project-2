@@ -83,11 +83,14 @@
 
           //
           const myWebResultsRenderedCallback = function(name, q, promos, results) {
-            //var adblock = document.getElementById("master-1");
-            //adblock.style.display="none";
-          //  let btn = document.createElement("BUTTON");
-          //  btn.innerHTML = "Add to Rango";
-          //  adblock.insertAdjacentElement('afterend', btn);
+
+            //Hide ads in the search results. 
+            let adblock = document.getElementsByClassName("gsc-adBlock");
+            if(adblock){
+              for (adDiv of adblock){
+                adDiv.style.display="none";
+              }
+            };
 
             for (const div of promos.concat(results)) {
               const innerDiv = document.createElement('div');
@@ -148,13 +151,14 @@
                   }
                 });
             });
+
           };
 
           window.__gcse || (window.__gcse = {});
           window.__gcse.searchCallbacks = {
             web: {
               starting: myWebSearchStartingCallback,
-              rendered: myWebResultsRenderedCallback, 
+              rendered: myWebResultsRenderedCallback,
             },
             image: {
               starting: myImageSearchStartingCallbackName,
