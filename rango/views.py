@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.utils import timezone
 from rango.bing_search import run_query
 
 def index(request):
@@ -179,6 +180,12 @@ def track_url(request):
         if 'page_id' in request.GET:
             page_id = request.GET['page_id']
             page = Page.objects.get(pk=page_id)
+            time = timezone.now()
+            if page.views == 0:
+                page.first_visit = time
+                page.last_visit = time
+            else:
+                page.last_visit = time
             page.views += 1
             page.save()
             return redirect(page.url)

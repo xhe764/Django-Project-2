@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 class Category(models.Model):
@@ -11,8 +12,13 @@ class Category(models.Model):
     liked_by = models.ManyToManyField(User)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
+        if self.views >= 0:
+            self.slug = slugify(self.name)
+            super(Category, self).save(*args, **kwargs)
+            return True
+        else:
+            return False
+
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -25,6 +31,18 @@ class Page(models.Model):
     title = models.CharField(max_length=128)
     url = models.URLField()
     views = models.IntegerField(default=0)
+    first_visit = models.DateTimeField(default=timezone.now)
+    last_visit = models.DateTimeField(default=timezone.now) 
+
+    def save(self, *args, **kwargs):
+        # now = timezone.now()
+        if self.views >= 0 and self.first_visit <= self.last_visit <= timezone.now():
+            super(Page, self).save(*args, **kwargs)
+            return True
+        else:
+            print("The page is not saved becaused of error(s).")
+            return False
+
     def __str__(self): # For Python 2, use __unicode__ too
         return self.title
 
